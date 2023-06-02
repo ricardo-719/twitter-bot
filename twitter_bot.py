@@ -2,7 +2,7 @@ import tweepy
 import openai
 import random
 import time
-from keys import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, OPENAI_API_KEY
+from keys.keys import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, OPENAI_API_KEY
 
 client = tweepy.Client(
     consumer_key=CONSUMER_KEY,
@@ -31,7 +31,6 @@ rest_of_prompt_phrases = [
     "Tweet with a tip about",
     "Tweet your thoughts on",
     "Highlight a tweet-worthy feature of",
-    "Tweet the benefits of",
     "Tweet a common challenge about",
     "Inspire others with a tweet about"
 ]
@@ -52,14 +51,11 @@ def generate_tweet():
     response = openai.Completion.create(
         engine='text-davinci-003',
         prompt=prompt,
-        max_tokens = 70
+        max_tokens = 68
     )
     return response.choices[0].text.strip()
 
+tweet = generate_tweet()
+print(tweet)
+response = client.create_tweet(text=f'{tweet}')
 
-while True:
-    tweet = generate_tweet()
-    print(tweet)
-    response = client.create_tweet(text=f'{tweet}')
-
-    time.sleep(10 * 60 * 60)
